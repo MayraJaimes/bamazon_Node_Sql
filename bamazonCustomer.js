@@ -6,7 +6,7 @@ var connection = mysql.createConnection({
     port: 3306,
     user: "root",
     password: "",
-    database: ""
+    database: "bamazon"
   });
   
 connection.connect(function(err) {
@@ -15,12 +15,21 @@ startQuestions();
 });
 
 function startQuestions() {
+    
+    var query = "SELECT item_id,product_name,price FROM bamazon";
+    connection.query(query, function(err, res) {
+        for (var i = 0; i < res.length; i++) {
+          console.log(
+            "Item ID: " +
+              res[i].item_id +
+              " || Product Name: " +
+              res[i].product_name +
+              " || Price: " +
+              res[i].price
+          );
+        }
+    });
 
-  function displayProducts () {
-  //   first going to display function of all of the items available for sale (including; the ids, names, and prices of products for sale) 
-  }
-
-//Then prompt users with two messages:
     inquirer
     .prompt([
       {
