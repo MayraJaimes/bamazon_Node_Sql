@@ -6,7 +6,7 @@ var connection = mysql.createConnection({
     port: 3306,
     user: "root",
     password: "",
-    database: ""
+    database: "bamazon"
 });
   
 connection.connect(function(err) {
@@ -48,15 +48,53 @@ inquirer
     });
 }
 
+
+
+item_id INT AUTO_INCREMENT,
+    product_name VARCHAR(40) NOT NULL,
+    department_name VARCHAR(40) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    stock_quantity INT NOT NULL,
+    PRIMARY KEY (item_id)
+
+
+
 function viewProducts() {
-    //list every available item: the item IDs, names, prices, and quantities.
+    var query = "SELECT item_id,product_name,price,stock_quantity FROM bamazon";
+    connection.query(query, function(err, res) {
+      for (var i = 0; i < res.length; i++) {
+        console.log(
+        "Item ID: " +
+        res[i].item_id +
+        " || Product Name: " +
+        res[i].product_name +
+        " || Price: " +
+        res[i].price
+        " || Stock Quantity: " +
+        res[i].stock_quantity
+        );
+      }
+    });
 }
 
 function viewLowInventory() {
-    //list all items with an inventory count lower than five.
+    var query = "SELECT item_id,product_name,stock_quantity FROM bamazon HAVING Sum(stock_quantity) < 5";
+    connection.query(query, function(err, res) {
+      for (var i = 0; i < res.length; i++) {
+        console.log(
+        "Item ID: " +
+        res[i].item_id +
+        " || Product Name: " +
+        res[i].product_name +
+        " || Stock Quantity: " +
+        res[i].stock_quantity
+        );
+      }
+    });
 }
 
 function addToInventory() {
+
     //display a prompt that will let the manager "add more" of any item currently in the store.
 }
 
