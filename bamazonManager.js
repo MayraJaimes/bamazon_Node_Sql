@@ -90,12 +90,42 @@ function viewLowInventory() {
         res[i].stock_quantity
         );
       }
+      startQuestions();
     });
 }
 
 function addToInventory() {
+    viewProducts();
+    inquirer
+    .prompt([
+        {
+          type: "input",
+          message: "What is the ID of the product that you would like to add more of?",
+          name: "id"
+        },
+        {
+          type: "input",
+          message: "How many more units of the product would you like add?",
+          name: "units"
+        }
+      ])
+    .then(function(answer) {
+      console.log(answer.id);
+      console.log(answer.units);
 
-    //display a prompt that will let the manager "add more" of any item currently in the store.
+      connection.query("SELECT * FROM top5000 WHERE ?", { song: answer.song }, function(err, res) {
+        var newStockQuant = res[0].stock_quantity + answer.units;
+        console.log(
+          "You have added: " +
+            answer.units +
+            " to the product: " +
+            res[0].product_name +
+            " to a new stock quantity of: " +
+            res[0].newStockQuant
+        );
+        startQuestions();
+      });
+    });
 }
 
 function addNewProduct() {
