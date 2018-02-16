@@ -22,3 +22,12 @@ INSERT INTO products (product_name, department_name, price, stock_quantity)
             ("Item", "department", 00.00, 0),
             ("Item", "department", 00.00, 0),
             ("Item", "department", 00.00, 0);
+
+
+* Table for the bamazonSupervisor.js component of application
+CREATE TABLE departments (
+    department_id INT AUTO_INCREMENT,
+    department_name VARCHAR(40) NOT NULL,
+    over_head_costs DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (department_id)
+);
