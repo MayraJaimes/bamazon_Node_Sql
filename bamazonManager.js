@@ -48,16 +48,12 @@ inquirer
     });
 }
 
-
-
 item_id INT AUTO_INCREMENT,
     product_name VARCHAR(40) NOT NULL,
     department_name VARCHAR(40) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     stock_quantity INT NOT NULL,
     PRIMARY KEY (item_id)
-
-
 
 function viewProducts() {
     var query = "SELECT item_id,product_name,price,stock_quantity FROM bamazon";
@@ -69,7 +65,7 @@ function viewProducts() {
         " || Product Name: " +
         res[i].product_name +
         " || Price: " +
-        res[i].price
+        res[i].price +
         " || Stock Quantity: " +
         res[i].stock_quantity
         );
@@ -118,10 +114,10 @@ function addToInventory() {
         console.log(
           "You have added: " +
             answer.units +
-            " to the product: " +
+            " units to the product: " +
             res[0].product_name +
-            " to a new stock quantity of: " +
-            res[0].newStockQuant
+            ". The new stock quantity is: " +
+            newStockQuant + " units."
         );
         startQuestions();
       });
@@ -129,7 +125,54 @@ function addToInventory() {
 }
 
 function addNewProduct() {
-    //allow the manager to add a completely new product to the store.
-}
+    inquirer
+    .prompt([
+        {
+          type: "input",
+          message: "What is the name of the product that you would like to add?",
+          name: "name"
+        },
+        {
+          type: "input",
+          message: "What deparment will this product be in?",
+          name: "dept"
+        },
+        {
+          type: "input",
+          message: "What is the price of the product?",
+          name: "price"
+        },
+        {
+          type: "input",
+          message: "How many more units of the product will there bed?",
+          name: "units"
+        }
+      ])
+    .then(function(answer) {
+      var query = "INSERT INTO products SET ?";
+      connection.query(query, 
+        {
+            product_name: answer.name, 
+            department_name: answer.dept, 
+            price: answer.price, 
+            stock_quantity: answer.units
+        }, 
+        function(err, res) {
+            console.log(
+                "You have added the product: " +
+                  answer.name +
+                  " to the store. It will be located in the " +
+                  answer.dept +
+                  " department. The price will be $" +
+                  answer.price +
+                  " and there is going to be a stock quantity of " +
+                  answer.units + " units."
+              );        
+            });
+        startQuestions();
+    });
+};
+
+
 
 
