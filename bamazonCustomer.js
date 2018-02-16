@@ -15,6 +15,11 @@ startQuestions();
 });
 
 function startQuestions() {
+
+  // function displayProducts () {
+  //   first going to display function of all of the items available for sale (including; the ids, names, and prices of products for sale) 
+  // }
+  
     inquirer
     .prompt([
       {
