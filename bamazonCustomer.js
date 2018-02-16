@@ -56,9 +56,10 @@ function startQuestions() {
       if(productStockQuant >= answer.units){
         var newProductQuant = productStockQuant - answer.units;
         var totalPrice = productPrice * answer.units;
+        var totalSales = res[0].product_sales + totalPrice;
 
         var query_three = "UPDATE products SET ? WHERE ?";
-        connection.query(query_three, [{stock_quantity: newProductQuant},{item_id: answer.id}], function(err, res) {
+        connection.query(query_three, [{stock_quantity: newProductQuant},{item_id: answer.id}, {product_sales: totalSales}], function(err, res) {
           console.log ("Order completed your total comes out to: $" + totalPrice);
         });
       }   
