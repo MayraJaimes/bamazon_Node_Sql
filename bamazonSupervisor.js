@@ -6,7 +6,7 @@ var connection = mysql.createConnection({
     port: 3306,
     user: "root",
     password: "",
-    database: ""
+    database: "bamazon"
   });
   
 connection.connect(function(err) {
@@ -16,22 +16,28 @@ connection.connect(function(err) {
 
 function startQuestions() {
     inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "View Product Sales by Department",
-        name: "view_sales"
-      },
-      {
-        type: "input",
-        message: "Create New Department",
-        name: "create_dept"
-      }
-    ])
+    .prompt({
+      name: "action",
+      type: "list",
+      message: "What would you like to do?",
+      choices: [
+          "View Product Sales by Department",
+          "View Low Inventory"]
+      })
     .then(function(answer) {
-        answer.view_sales;
-        answer.create_dept;
+      if (answer.action === "View Product Sales by Department") {
+        viewProducts();
+      }
 
-        //functions         
+      else {
+
+      }
     });
+}
+
+function viewProducts() {
+  var query = "SELECT department_id, department_name, over_head_costs, product_sales, over_head_costs - products_sales AS total_profit FROM products LEFT JOIN departments ON products.department_name = departments.department_name GROUP BY department_name";
+  connection.query(query, function(err, res) {
+      //SHOW table
+  });
 }
