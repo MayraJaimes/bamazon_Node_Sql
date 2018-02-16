@@ -66,6 +66,7 @@ function startQuestions() {
       else {
         console.log("Insufficient quantity!");
       }
+      startQuestions()
     });
   });
 }
