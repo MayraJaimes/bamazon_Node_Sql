@@ -49,7 +49,7 @@ inquirer
 }
 
 function viewProducts() {
-    var query = "SELECT item_id,product_name,price,stock_quantity FROM bamazon";
+    var query = "SELECT item_id, product_name, price, stock_quantity FROM products";
     connection.query(query, function(err, res) {
       for (var i = 0; i < res.length; i++) {
         console.log(
@@ -63,11 +63,12 @@ function viewProducts() {
         res[i].stock_quantity
         );
       }
+      startQuestions();
     });
 }
 
 function viewLowInventory() {
-    var query = "SELECT item_id,product_name,stock_quantity FROM bamazon HAVING Sum(stock_quantity) < 5";
+    var query = "SELECT item_id, product_name, stock_quantity FROM products HAVING Sum(stock_quantity) < 5";
     connection.query(query, function(err, res) {
       for (var i = 0; i < res.length; i++) {
         console.log(
@@ -80,11 +81,11 @@ function viewLowInventory() {
         );
       }
       startQuestions();
+
     });
 }
 
 function addToInventory() {
-    viewProducts();
     inquirer
     .prompt([
         {
@@ -99,11 +100,10 @@ function addToInventory() {
         }
       ])
     .then(function(answer) {
-      console.log(answer.id);
-      console.log(answer.units);
-
-      connection.query("SELECT * FROM top5000 WHERE ?", { song: answer.song }, function(err, res) {
-        var newStockQuant = res[0].stock_quantity + answer.units;
+      connection.query("SELECT * FROM products WHERE ?", {item_id: answer.id}, function(err, res) {
+        var newStockQuant = parseInt(res[0].stock_quantity) + parseInt(answer.units);
+       
+        console.log("---");
         console.log(
           "You have added: " +
             answer.units +
@@ -112,58 +112,63 @@ function addToInventory() {
             ". The new stock quantity is: " +
             newStockQuant + " units."
         );
-        startQuestions();
-      });
+        console.log("---");
+
+        var query_two = "UPDATE products SET ? WHERE ?";
+        connection.query(query_two, [{stock_quantity: newStockQuant}, {item_id: answer.id}], function(err, res) {
+       });
+      startQuestions();
     });
+  });
 }
 
 function addNewProduct() {
-    inquirer
-    .prompt([
-        {
-          type: "input",
-          message: "What is the name of the product that you would like to add?",
-          name: "name"
-        },
-        {
-          type: "input",
-          message: "What deparment will this product be in?",
-          name: "dept"
-        },
-        {
-          type: "input",
-          message: "What is the price of the product?",
-          name: "price"
-        },
-        {
-          type: "input",
-          message: "How many more units of the product will there bed?",
-          name: "units"
-        }
-      ])
-    .then(function(answer) {
-      var query = "INSERT INTO products SET ?";
-      connection.query(query, 
-        {
-            product_name: answer.name, 
-            department_name: answer.dept, 
-            price: answer.price, 
-            stock_quantity: answer.units
-        }, 
-        function(err, res) {
-            console.log(
-                "You have added the product: " +
-                  answer.name +
-                  " to the store. It will be located in the " +
-                  answer.dept +
-                  " department. The price will be $" +
-                  answer.price +
-                  " and there is going to be a stock quantity of " +
-                  answer.units + " units."
-              );        
-            });
-        startQuestions();
-    });
+  inquirer
+  .prompt([
+    {
+      type: "input",
+      message: "What is the name of the product that you would like to add?",
+      name: "name"
+    },
+    {
+      type: "input",
+      message: "What department will this product be in?",
+      name: "dept"
+    },
+    {
+      type: "input",
+      message: "What is the price of the product?",
+      name: "price"
+    },
+    {
+      type: "input",
+      message: "How many units of the product will there be?",
+      name: "units"
+    }
+  ])
+  .then(function(answer) {
+    var query = "INSERT INTO products SET ?";
+    connection.query(query, 
+      [
+      {product_name: answer.name, 
+      department_name: answer.dept, 
+      price: answer.price, 
+      stock_quantity: answer.units,
+      product_sales: 0}
+    ], function(err, res) {
+      console.log(res);
+      console.log(
+        "You have added the product: " +
+        answer.name +
+        " to the store. It will be located in the " +
+        answer.dept +
+        " department. The price will be $" +
+        answer.price +
+        " and there is going to be a stock quantity of " +
+        answer.units + " units."
+      ); 
+    })           
+  });
 };
 
 

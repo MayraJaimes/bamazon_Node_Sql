@@ -59,7 +59,7 @@ function startQuestions() {
         var totalSales = res[0].product_sales + totalPrice;
 
         var query_two = "UPDATE products SET ? WHERE ?";
-        connection.query(two, [{stock_quantity: newProductQuant}, {item_id: answer.id}, {product_sales: totalSales}], function(err, res) {
+        connection.query(query_two, [{stock_quantity: newProductQuant}, {item_id: answer.id}, {product_sales: totalSales}], function(err, res) {
           console.log("---");
           console.log ("Order completed! Your total comes out to: $" + totalPrice);
           console.log("---");
