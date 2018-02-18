@@ -2,12 +2,12 @@ var inquirer = require("inquirer");
 var mysql = require("mysql");
 
 var connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "",
-    database: "bamazon"
-  });
+  host: "localhost",
+  port: 3306,
+  user: "root",
+  password: "",
+  database: "bamazon"
+});
   
 connection.connect(function(err) {
   if (err) throw err;
@@ -15,24 +15,23 @@ connection.connect(function(err) {
 });
 
 function startQuestions() {
-    inquirer
-    .prompt({
-      name: "action",
-      type: "list",
-      message: "What would you like to do?",
-      choices: [
-          "View Product Sales by Department",
-          "Create New Department"]
-      })
-    .then(function(answer) {
-      if (answer.action === "View Product Sales by Department") {
-        viewProducts();
-      }
-
-      else {
-        newDepartment();
-      }
-    });
+  inquirer
+  .prompt({
+    name: "action",
+    type: "list",
+    message: "What would you like to do?",
+    choices: [
+        "View Product Sales by Department",
+        "Create New Department"]
+    })
+  .then(function(answer) {
+    if (answer.action === "View Product Sales by Department") {
+      viewProducts();
+    }
+    else {
+      newDepartment();
+    }
+  });
 }
 
 function viewProducts() {
@@ -45,17 +44,17 @@ function viewProducts() {
 function newDepartment(){
   inquirer
   .prompt([
-      {
-        type: "input",
-        message: "What is the name of the new department?",
-        name: "name"
-      },
-      {
-        type: "input",
-        message: "What is the over head cost of the new department?",
-        name: "cost"
-      }
-    ])
+    {
+      type: "input",
+      message: "What is the name of the new department?",
+      name: "name"
+    },
+    {
+      type: "input",
+      message: "What is the over head cost of the new department?",
+      name: "cost"
+    }
+  ])
   .then(function(answer) {
     var query = "INSERT INTO departments SET ?";
     connection.query(query, 
@@ -64,14 +63,13 @@ function newDepartment(){
         over_head_cost: answer.cost 
       }, 
       function(err, res) {
-          console.log(
-              "You have added the department: " +
-                answer.name +
-                " to the store. With the over head cost of $" +
-                answer.cost
-            );        
-          });
-      startQuestions();
+        console.log(
+        "You have added the department: " +
+        answer.name +
+        " to the store. With the over head cost of $" +
+        answer.cost
+        );        
+      });
+    startQuestions();
   });
-
 }
