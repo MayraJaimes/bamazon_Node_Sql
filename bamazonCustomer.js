@@ -11,12 +11,11 @@ var connection = mysql.createConnection({
   
 connection.connect(function(err) {
   if (err) throw err;
-  startQuestions();
+  displayProducts();
 });
 
-function startQuestions() {
-
-  var query = "SELECT item_id,product_name,price FROM bamazon";
+function displayProducts(){
+  var query = "SELECT item_id,product_name,price FROM products";
   connection.query(query, function(err, res) {
     for (var i = 0; i < res.length; i++) {
       console.log(
@@ -24,12 +23,16 @@ function startQuestions() {
         res[i].item_id +
         " || Product Name: " +
         res[i].product_name +
-        " || Price: " +
+        " || Price: $" +
         res[i].price
       );
-    }
+    } 
+    console.log("---");
+    startQuestions();
   });
+};
 
+function startQuestions() {
   inquirer
   .prompt([
     {
@@ -44,12 +47,9 @@ function startQuestions() {
     }
   ])
   .then(function(answer) {
-    answer.id;
-    answer.units;
 
-    var query_two = "SELECT price,stock_quantity FROM bamazon WHERE ?";
-    connection.query(query_two, { item_id: answer.id }, function(err, res) {
-        
+    var query = "SELECT price, stock_quantity FROM products WHERE ?";
+    connection.query(query, { item_id: answer.id }, function(err, res) {
       var productPrice = res[0].price;
       var productStockQuant = res[0].stock_quantity;
 
@@ -58,16 +58,20 @@ function startQuestions() {
         var totalPrice = productPrice * answer.units;
         var totalSales = res[0].product_sales + totalPrice;
 
-        var query_three = "UPDATE products SET ? WHERE ?";
-        connection.query(query_three, [{stock_quantity: newProductQuant},{item_id: answer.id}, {product_sales: totalSales}], function(err, res) {
-          console.log ("Order completed your total comes out to: $" + totalPrice);
+        var query_two = "UPDATE products SET ? WHERE ?";
+        connection.query(two, [{stock_quantity: newProductQuant}, {item_id: answer.id}, {product_sales: totalSales}], function(err, res) {
+          console.log("---");
+          console.log ("Order completed! Your total comes out to: $" + totalPrice);
+          console.log("---");
         });
       }   
-      
       else {
+        console.log("---");
         console.log("Insufficient quantity!");
+        console.log("---");
       }
-      startQuestions()
+      displayProducts();
     });
   });
-}
+};
+

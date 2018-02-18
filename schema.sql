@@ -12,17 +12,17 @@ CREATE TABLE products (
     PRIMARY KEY (item_id)
 );
  
-INSERT INTO products (product_name, department_name, price, stock_quantity)
-    VALUES ("Item", "department", 00.00, 0),
-            ("Item", "department", 00.00, 0),
-            ("Item", "department", 00.00, 0),
-            ("Item", "department", 00.00, 0),
-            ("Item", "department", 00.00, 0),
-            ("Item", "department", 00.00, 0),
-            ("Item", "department", 00.00, 0),
-            ("Item", "department", 00.00, 0),
-            ("Item", "department", 00.00, 0),
-            ("Item", "department", 00.00, 0);
+INSERT INTO products (product_name, department_name, price, stock_quantity, product_sales)
+    VALUES ("Television", "Electronics", 230.00, 50, 300.00),
+            ("Jacket", "Clothing", 80.00, 10, 30.00),
+            ("Desk", "Furniture", 140.00, 40, 400.00),
+            ("Cell Phone", "Electronics", 500.00, 20, 700.00),
+            ("Bed", "Furniture", 820.00, 10, 0),
+            ("Sofa", "Furniture", 400.00, 4, 800),
+            ("Book shelf", "Furniture", 65.00, 5, 500.00),
+            ("Dress", "Clothing", 45.00, 10, 240.00),
+            ("Pants", "Clothing", 68.00, 25, 300.00),
+            ("Pajamas", "Clothing", 23.00, 30, 100.00);
 
 
 CREATE TABLE departments (
