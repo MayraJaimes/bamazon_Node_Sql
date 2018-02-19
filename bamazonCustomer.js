@@ -1,6 +1,5 @@
 var inquirer = require("inquirer");
 var connection = require("./connection");
-var cTable = require('console.table');
   
 connection.connect(function(err) {
   if (err) throw err;
