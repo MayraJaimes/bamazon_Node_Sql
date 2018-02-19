@@ -1,17 +1,9 @@
 var inquirer = require("inquirer");
-var mysql = require("mysql");
-
-var connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "",
-    database: "bamazon"
-});
+var connection = require("./connection");
   
 connection.connect(function(err) {
-    if (err) throw err;
-    startQuestions();
+  if (err) throw err;
+  startQuestions();
 });
   
 function startQuestions() {
@@ -30,25 +22,25 @@ function startQuestions() {
   .then(function(answer) {
     switch (answer.action) {
       case "View products for sale":
-      viewProducts();
+      viewProducts(startQuestions);
       break;
 
-      case "View Low Inventory":
+      case "View low inventory":
       viewLowInventory();
       break;
 
-      case "Add to Inventory":
-      addToInventory();
+      case "Add to inventory":
+      viewProducts(addToInventory);
       break;
 
-      case "Add New Product":
+      case "Add new product":
       addNewProduct();
       break;
     }
   });
 }
 
-function viewProducts() {
+function viewProducts(callback) {
   var query = "SELECT item_id, product_name, price, stock_quantity FROM products";
   connection.query(query, function(err, res) {
     console.log("---");
@@ -56,6 +48,7 @@ function viewProducts() {
       console.log("Item ID: " + res[i].item_id + " || Product Name: " + res[i].product_name + " || Price: " + res[i].price + " || Stock Quantity: " + res[i].stock_quantity);
     }
     console.log("---");
+    callback();
   });
 }
 

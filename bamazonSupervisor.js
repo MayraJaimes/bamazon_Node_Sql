@@ -1,13 +1,5 @@
 var inquirer = require("inquirer");
-var mysql = require("mysql");
-
-var connection = mysql.createConnection({
-  host: "localhost",
-  port: 3306,
-  user: "root",
-  password: "",
-  database: "bamazon"
-});
+var connection = require("./connection");
   
 connection.connect(function(err) {
   if (err) throw err;
@@ -35,8 +27,11 @@ function startQuestions() {
 }
 
 function viewProducts() {
-  var query = "SELECT department_id, department_name, over_head_costs, product_sales, over_head_costs - products_sales AS total_profit FROM departments LEFT JOIN products ON products.department_name = departments.department_name GROUP BY department_name";
-  connection.query(query, function(err, res) {
+  var query = "SELECT department_id, departments.department_name, over_head_costs, sum(products.product_sales) FROM departments LEFT JOIN products ON departments.department_id = products.item_id GROUP BY departments.department_id";
+
+  connection.query(query, function(err, res) {  
+    console.log(res);
+
       //SHOW table
   });
 }
@@ -56,20 +51,15 @@ function newDepartment(){
     }
   ])
   .then(function(answer) {
+
     var query = "INSERT INTO departments SET ?";
     connection.query(query, 
-      {
-        department_name: answer.name, 
-        over_head_cost: answer.cost 
-      }, 
+      [{dept_name: answer.name, over_head_costs: answer.cost}], 
       function(err, res) {
-        console.log(
-        "You have added the department: " +
-        answer.name +
-        " to the store. With the over head cost of $" +
-        answer.cost
-        );        
+        console.log("---");
+        console.log("You have added the department: " + answer.name + " to the store. With the over head cost of $" + answer.cost);
+        console.log("---");
+        // startQuestions();
       });
-    startQuestions();
   });
 }
