@@ -1,5 +1,6 @@
 var inquirer = require("inquirer");
 var connection = require("./connection");
+var cTable = require('console.table');
   
 connection.connect(function(err) {
   if (err) throw err;
@@ -40,6 +41,7 @@ function askForItem() {
         var newProductQuant = productStockQuant - answer.units;
         var totalPrice = productPrice * answer.units;
         var totalSales = res[0].product_sales + totalPrice;
+        console.table(res);
 
         var query_two = "UPDATE products SET ? WHERE ?";
         connection.query(query_two, [{stock_quantity: newProductQuant, product_sales: totalSales}, {item_id: answer.id}], function(err, res) {
