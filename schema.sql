@@ -24,10 +24,14 @@ INSERT INTO products (product_name, department_name, price, stock_quantity, prod
             ("Pants", "Clothing", 68.00, 25, 300.00),
             ("Pajamas", "Clothing", 23.00, 30, 100.00);
 
-
 CREATE TABLE departments (
     department_id INT AUTO_INCREMENT,
     department_name VARCHAR(40) NOT NULL,
     over_head_costs DECIMAL(10,2) NOT NULL,
     PRIMARY KEY (department_id)
 );
+
+INSERT INTO departments (department_name, over_head_costs)
+    VALUES ("Electronics", 2000),
+			("Clothing", 500),
+			("Furniture", 1000);
