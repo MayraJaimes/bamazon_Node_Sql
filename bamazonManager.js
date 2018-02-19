@@ -63,7 +63,6 @@ function viewProducts() {
         res[i].stock_quantity
         );
       }
-      startQuestions();
     });
 }
 
@@ -81,45 +80,63 @@ function viewLowInventory() {
         );
       }
       startQuestions();
-
     });
 }
 
 function addToInventory() {
-    inquirer
-    .prompt([
-        {
-          type: "input",
-          message: "What is the ID of the product that you would like to add more of?",
-          name: "id"
-        },
-        {
-          type: "input",
-          message: "How many more units of the product would you like add?",
-          name: "units"
-        }
-      ])
-    .then(function(answer) {
-      connection.query("SELECT * FROM products WHERE ?", {item_id: answer.id}, function(err, res) {
-        var newStockQuant = parseInt(res[0].stock_quantity) + parseInt(answer.units);
-       
-        console.log("---");
-        console.log(
-          "You have added: " +
-            answer.units +
-            " units to the product: " +
-            res[0].product_name +
-            ". The new stock quantity is: " +
-            newStockQuant + " units."
-        );
-        console.log("---");
 
-        var query_two = "UPDATE products SET ? WHERE ?";
-        connection.query(query_two, [{stock_quantity: newStockQuant}, {item_id: answer.id}], function(err, res) {
-       });
-      startQuestions();
+  function viewProducts() {
+    var query = "SELECT item_id, product_name, price, stock_quantity FROM products";
+    connection.query(query, function(err, res) {
+      for (var i = 0; i < res.length; i++) {
+        console.log(
+        "Item ID: " + res[i].item_id +
+        " || Product Name: " + res[i].product_name +
+        " || Price: " + res[i].price +
+        " || Stock Quantity: " + res[i].stock_quantity
+        );
+      }
+      getNewInfo();
     });
-  });
+  }
+
+  function getNewInfo(){
+      inquirer
+      .prompt([
+          {
+            type: "input",
+            message: "What is the ID of the product that you would like to add more of?",
+            name: "id"
+          },
+          {
+            type: "input",
+            message: "How many more units of the product would you like add?",
+            name: "units"
+          }
+        ])
+      .then(function(answer) {
+        connection.query("SELECT * FROM products WHERE ?", {item_id: answer.id}, function(err, res) {
+          var newStockQuant = parseInt(res[0].stock_quantity) + parseInt(answer.units);
+        
+          console.log("---");
+          console.log(
+            "You have added: " +
+              answer.units +
+              " units to the product: " +
+              res[0].product_name +
+              ". The new stock quantity is: " +
+              newStockQuant + " units."
+          );
+          console.log("---");
+
+          var query_two = "UPDATE products SET ? WHERE ?";
+          connection.query(query_two, [{stock_quantity: newStockQuant}, {item_id: answer.id}], function(err, res) {
+          });
+        startQuestions();
+      });
+    });
+  }
+  viewProducts();
 }
 
 function addNewProduct() {
@@ -155,8 +172,8 @@ function addNewProduct() {
       price: answer.price, 
       stock_quantity: answer.units,
       product_sales: 0}
-    ], function(err, res) {
-      console.log(res);
+    ], 
+    function(err, res) {
       console.log(
         "You have added the product: " +
         answer.name +
