@@ -27,7 +27,7 @@ function startQuestions() {
 }
 
 function viewProducts() {
-  var query = "SELECT department_id, departments.department_name, over_head_costs, sum(products.product_sales) FROM departments LEFT JOIN products ON departments.department_id = products.item_id GROUP BY departments.department_id";
+  var query = "SELECT department_id, departments.department_name, over_head_costs, sum(product_sales), (sum(product_sales) - over_head_costs) AS total_profit FROM departments JOIN products ON departments.department_name = products.department_name GROUP BY departments.department_name, department_id ORDER BY department_id";
 
   connection.query(query, function(err, res) {  
     console.log(res);

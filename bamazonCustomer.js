@@ -31,8 +31,7 @@ function askForItem() {
     }
   ])
   .then(function(answer) {
-
-    var query = "SELECT price, stock_quantity FROM products WHERE ?";
+    var query = "SELECT * FROM products WHERE ?";
     connection.query(query, { item_id: answer.id }, function(err, res) {
       var productPrice = res[0].price;
       var productStockQuant = res[0].stock_quantity;
@@ -43,7 +42,7 @@ function askForItem() {
         var totalSales = res[0].product_sales + totalPrice;
 
         var query_two = "UPDATE products SET ? WHERE ?";
-        connection.query(query_two, [{stock_quantity: newProductQuant}, {item_id: answer.id}, {product_sales: totalSales}], function(err, res) {
+        connection.query(query_two, [{stock_quantity: newProductQuant, product_sales: totalSales}, {item_id: answer.id}], function(err, res) {
           console.log("---");
           console.log ("Order completed! Your total comes out to: $" + totalPrice);
           console.log("---");
