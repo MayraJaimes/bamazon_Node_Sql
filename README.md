@@ -1,4 +1,4 @@
-# Bamazon: Node.js & MySQL
+# Bamazon
 
 ## Overview
 In order to be able to use this app the user will have to install the different npm packages listed in my package.JSON file. These include: Inquirer, MySQL, and Console.Table.
@@ -8,8 +8,11 @@ There are three parts to this application each with different functionality depe
     -Manager component
     -Supervisor component
 
-## Customer.JS
-This app is able to take in orders from customers. First, when accesing this app the user will have all the items available in the store displayed to them.
+## Description
+
+*Customer.js
+
+This part of the application is able to take in orders from customers. First, when accessing this app the user will have all the items available in the store displayed to them.
 
 The customer will then be prompted with two questions:
     * The first should ask them the ID of the product they would like to buy.
@@ -20,7 +23,8 @@ Then, the customer will be given a message that includes if the order was proces
 
 If the order did not get processed a message displayed will let them know it was not able to get fullfilled.
 
-## Manager.JS
+*Manager.js
+
 In this part of the application the manager is able to pick from the following options:
     * View Products for Sale
     * View Low Inventory
@@ -39,7 +43,8 @@ If the manager selects s `Add to Inventory`, the app displays a prompt that lets
 If the manager selects  `Add New Product`, it allows them to add a new product to the store. This item will then be added to the table.
 ![manager.js screenshot](./images/manager3.jpg?raw=true "manager4.JS questions")
 
-## Supervisor.JS
+*Supervisor.js
+
 In this part of the application the supervisor is able to pick from the following options:
 * View Product Sales by Department
 * Create New Department
@@ -52,3 +57,7 @@ The customer.js file was changed in order to be able to add to the total number 
 If the supervisor selects `Create New Department`, they are then prompted to enter the name of the new deparment and the over_head_costs. This information is then inserted into the "departments" table in the database.
 ![supervisor.js screenshot](./images/supervisor2.jpg?raw=true "supervisor2.JS questions")
 
+## Technologies used:
+
+* Node.js
+* MySQL
